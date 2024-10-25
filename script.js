@@ -9,7 +9,7 @@ const expenseQuantity = document.querySelector("aside header p span")
 const expensesTotal = document.querySelector("aside header h2")
 
 //capturando o evento do input
-amount.oninput = () => { 
+amount.oninput = () => {
 
     //selecionando o valor que eu digitar no input e substituindo por nada
     let value = amount.value.replace(/\D/g, "")
@@ -18,8 +18,8 @@ amount.oninput = () => {
     value = Number(value) / 100
 
     /*para fazer a função abaixo receber o valor atualizado*/
-    amount.value = formatCurrencyBRL (value)
-    
+    amount.value = formatCurrencyBRL(value)
+
     //fazendo o valor do input receber a substituição que fiz acima, não permitindo que as letras apareçam na caixinha 
     //amount.value = value
 }
@@ -53,21 +53,21 @@ form.onsubmit = (event) => {
 
     //chama a função que irá adicionar o item na lista
     expenseAdd(newExpense)
-    
+
 }
 
-function expenseAdd (newExpense) {
+function expenseAdd(newExpense) {
     try {
         //cria o elemento de li para adicionar o item (ul) na lista (ul)
         const expenseItem = document.createElement("li")
         expenseItem.classList.add("expense") //adicionando a classe de estilização
 
-        //adicionando o ícone da categoria 
+        //adicionando o ícone da categoria
         const expenseIcon = document.createElement("img")
-        
+
         //coloca a imagem dinamicamente de acordo com o com o valor da categoria (category.value)
         expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`)
-        
+
         //adicionando o alt
         expenseIcon.setAttribute("alt", newExpense.category_name)
 
@@ -88,7 +88,7 @@ function expenseAdd (newExpense) {
 
         //criando o valor da despesa
         expenseAmount = document.createElement("span")
-        expenseAmount.classList.add(expense-amount)
+        expenseAmount.classList.add("expense-amount")
         expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount.toUpperCase().replace("R$", "")}`
 
         //criando icone de remover
@@ -101,7 +101,7 @@ function expenseAdd (newExpense) {
 
         //adiciona as informações no item
         expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon)
-        
+
         //adiciona o item na lista
         expenseList.append(expenseItem)
 
@@ -111,7 +111,7 @@ function expenseAdd (newExpense) {
         //depois que adiciona um item, atualiza os totais
         updateTotals()
 
-    
+
     }
 
     catch (error) {
@@ -121,40 +121,40 @@ function expenseAdd (newExpense) {
 }
 
 //adicionando função que atualiza o número de despesas e o valor total
-function updateTotals () {
+function updateTotals() {
     try {
         const itens = expenseList.children
 
         //atualiza a quantidade de itens da lista
         expenseQuantity.textContent = `${itens.length} ${itens.length > 1 ? "despesas" : "despesa"}`
         console.log(itens)
-        
+
         let total = 0
 
-        for(let item = 0; item < itens.length; item++){
+        for (let item = 0; item < itens.length; item++) {
             const itemAmount = itens[item].querySelector(".expense-amount")
 
             let value = itemAmount.textContent.replace(/[^\d,]/g, "").replace(".", ",")
 
-            value = parseFloat(value) 
+            value = parseFloat(value)
 
-            if(isNaN(value)){
-                return alert ("Não foi possível calcular o total")
+            if (isNaN(value)) {
+                return alert("Não foi possível calcular o total")
             }
 
             total += Number(value)
         }
 
         expensesTotal.textContent = formatCurrencyBRL(total)
-        
+
         //cria a small de R$ para o total
-        const symbolBRL = document.createElement("small") 
+        const symbolBRL = document.createElement("small")
         //escolhe o conteúdo da small
-        symbolBRL = "R$"
+        symbolBRL.textContent = "R$"
 
         //formata o total
         total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
-        
+
         //limpa o conteúdo do elemento
         expensesTotal.innerHTML = ""
 
@@ -163,15 +163,15 @@ function updateTotals () {
     }
 
     catch (error) {
-    alert("Não foi possível atualizar os totais")   
+        alert("Não foi possível atualizar os totais")
     }
 }
 
 
 //evento que captura clique nos itens da lista
-expenseList.addEventListener("click", function(event) {
+expenseList.addEventListener("click", function (event) {
     //verifica se o item clicado é o de remover
-    if(event.target.classList.contains("remove-icon")){
+    if (event.target.classList.contains("remove-icon")) {
 
         //obtém a li pai do elemento clicado
         const item = event.target.closest(".expense")
@@ -185,10 +185,10 @@ expenseList.addEventListener("click", function(event) {
 })
 
 
-function formClear () {
+function formClear() {
     expense.value = ""
     category.value = ""
-    amount = ""
+    amount.value = ""
 
     //deixa o foco no input do nome da despesa após algo ser adicionado
     expense.focus()
