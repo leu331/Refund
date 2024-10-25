@@ -156,8 +156,9 @@ aside {
   border-radius: 1rem;
   padding: 2.5rem;
   max-width: 462px;
-
+  max-height: 26.8rem;
   min-width: 600px;
+
 }
 
 aside header {
@@ -169,6 +170,7 @@ aside header {
   border-bottom-color: #e4ece9;
   padding-bottom: 1.5rem;
   margin-bottom: 1.5rem;
+  
 }
 aside header p {
   color: #4d5c57;
