@@ -88,7 +88,7 @@ function expenseAdd (newExpense) {
 
         //criando o valor da despesa
         expenseAmount = document.createElement("span")
-        expenseAmount.classList.add(expense-amount)
+        expenseAmount.classList.add("expense-amount")
         expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount.toUpperCase().replace("R$", "")}`
 
         //criando icone de remover
@@ -111,7 +111,6 @@ function expenseAdd (newExpense) {
         //depois que adiciona um item, atualiza os totais
         updateTotals()
 
-    
     }
 
     catch (error) {
@@ -150,7 +149,7 @@ function updateTotals () {
         //cria a small de R$ para o total
         const symbolBRL = document.createElement("small") 
         //escolhe o conteúdo da small
-        symbolBRL = "R$"
+        symbolBRL.value = "R$"
 
         //formata o total
         total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
@@ -170,6 +169,7 @@ function updateTotals () {
 
 //evento que captura clique nos itens da lista
 expenseList.addEventListener("click", function(event) {
+
     //verifica se o item clicado é o de remover
     if(event.target.classList.contains("remove-icon")){
 
@@ -178,17 +178,18 @@ expenseList.addEventListener("click", function(event) {
 
         //remove o item
         item.remove()
-
     }
+
     //atualiza os totais
     updateTotals()
+
 })
 
 
 function formClear () {
     expense.value = ""
     category.value = ""
-    amount = ""
+    amount.value = ""
 
     //deixa o foco no input do nome da despesa após algo ser adicionado
     expense.focus()
