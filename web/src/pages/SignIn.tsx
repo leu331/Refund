@@ -26,14 +26,11 @@ export function SignIn(){
             type="password" 
             placeholder=""
             onChange={(event) => setPassword(event.target.value)}/>
-
-            
+    
             <Button className="" isLoading={isLoading} type="submit" title="Login"/>
 
             <a className="flex justify-center items-center mt-2 hover:text-green-200" href="/signup">Criar conta</a>
-           
-
-           
+        
         </form>
     )
 }
