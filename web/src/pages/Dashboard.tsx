@@ -9,31 +9,56 @@ import { CATEGORIES } from "../utils/categories";
 import searchSvg from "../assets/search.svg";
 import { Pagination } from "../components/Pagination";
 
-const REFUND_EXAMPLE = {
-    id: "123",
-    username: "Alice",
-    category: "Transporte",
-    expense: formatCurrency(43.3),
-    categoryImg: CATEGORIES["transportSvg"].icon,
-};
+import { api } from "../services/api";
+import { AxiosError } from "axios";
+import { data } from "react-router";
+
+// const REFUND_EXAMPLE = {
+//     id: "123",
+//     username: "Alice",
+//     category: "Transporte",
+//     expense: formatCurrency(43.3),
+//     categoryImg: CATEGORIES["transport"].icon,
+// };
+
+const PER_PAGE = 5
 
 export function Dashboard() {
     const [name, setName] = useState("");
     const [page, setPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(10); // Esse valor precisa ser dinâmico futuramente
-    const [refunds, setRefunds] = useState<RefundItemProps[]>([REFUND_EXAMPLE]); // Estado para armazenar os reembolsos
+    const [totalPage, setTotalPage] = useState(1); // Esse valor precisa ser dinâmico futuramente
+    const [refunds, setRefunds] = useState<RefundItemProps[]>([]); // Estado para armazenar os reembolsos
 
-    function fetchRefunds(event?: React.FormEvent) {
-        if (event) event.preventDefault();
-        
-        console.log(`Buscando reembolsos para "${name}" na página ${page}...`);
+    async function fetchRefunds() {
+        try {
+            const response = await api.get<RefundPaginationAPIResponse>(`/refunds?=${name.trim()}&page=${page}&perPage=${PER_PAGE}`)
+            setRefunds(response.data.refunds.map((refund) =>({
+                id: refund.id,
+                name: refund.user.name,
+                category: refund.name,
+                amount: formatCurrency(refund.amount),
+                categoryImg: CATEGORIES[refund.category].icon
+            })))
 
-        // Simulação de chamada à API (substituir por uma requisição real futuramente)
-        setTimeout(() => {
-            console.log(`Reembolsos carregados para a página ${page}`);
-            setRefunds([REFUND_EXAMPLE]); // Atualizar com os dados reais
-        }, 500);
+            setTotalPage(response.data.pagination.totalPages)
+        } 
+        catch (error) {
+          console.log(error)  
+
+          if (error instanceof AxiosError) {
+            return alert(error.response?.data.message)
+          }
+          return alert("Não foi possível carregar os reembolsos.")
+        }
+     
     }
+
+    function onSubmit(event: React.FormEvent) {
+        event.preventDefault()
+        fetchRefunds()
+    }
+
+    
 
     function handlePagination(action: "next" | "previous") {
         setPage((prevPage) => {
@@ -50,11 +75,11 @@ export function Dashboard() {
         });
     }
     
-
     // Sempre buscar os reembolsos quando a página mudar
     useEffect(() => {
         fetchRefunds();
     }, [page]);
+    
 
     return (
         <div className="bg-gray-500 rounded-xl p-10 md:min-w-[768px]">
@@ -69,8 +94,8 @@ export function Dashboard() {
                     onChange={(event) => setName(event.target.value)}
                 />
 
-                <Button variant="iconSmall" onClick={fetchRefunds}>
-                    <img src={searchSvg} alt="Pesquisar" />
+                <Button variant="iconSmall" onClick={onSubmit} className="w-12 h-12"> 
+                    <img src={searchSvg} alt="Pesquisar" className="w-5"/>
                 </Button>
             </form>
 

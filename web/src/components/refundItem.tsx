@@ -1,8 +1,8 @@
 export type RefundItemProps = {
     id: string,
-    username: string,
+    name: string,
     category: string,
-    expense: string,
+    amount: string,
     categoryImg: string
 }
 
@@ -18,13 +18,13 @@ export function RefundItem({ data, ...rest }: ItemProps) {
             <img className="w-8 h-8" src={data.categoryImg} alt="" />
 
             <div className="flex flex-col flex-1">
-                <strong className="text-gray-100">{data.username}</strong>
+                <strong className="text-gray-100">{data.name}</strong>
                 <span className="text-xs text-gray-200">{data.category}</span>
             </div>
 
             <span>
                 <small>R$</small>
-                {data.expense}
+                {data.amount}
             </span>
         </Link>
     )

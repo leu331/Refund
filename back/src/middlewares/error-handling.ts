@@ -14,6 +14,7 @@ export const errorHandling: ErrorRequestHandler = (
   }
 
   if (error instanceof ZodError) {
+    console.log("Erros de validação:", error.format()) //detalha melhor os erros
     response.status(400).json({
       message: "validation error",
       issues: error.format(),
